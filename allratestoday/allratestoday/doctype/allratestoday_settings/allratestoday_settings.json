@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-11-01 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "source",
+  "bank",
+  "other_bank_code",
+  "api_key",
+  "live_sync_frequency",
+  "column_break_1",
+  "base_currency",
+  "currencies",
+  "write_buying_selling",
+  "write_inverse",
+  "direction_section",
+  "rate_direction_note",
+  "status_section",
+  "last_sync",
+  "last_rate_date",
+  "column_break_2",
+  "last_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "0",
+   "description": "Run the scheduled sync"
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Select",
+   "label": "Rate Source",
+   "options": "RBI/FBIL reference (keyless)\nCBIC customs (keyless)\nECB reference (keyless)\nIndian bank TT card (keyless)\nLive market rates (API key)\nOther central bank code",
+   "default": "RBI/FBIL reference (keyless)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Select",
+   "label": "Bank",
+   "options": "sbi\naxis\nbob\nbom\ncanara\niob\nunion",
+   "default": "sbi",
+   "depends_on": "eval:doc.source=='Indian bank TT card (keyless)'",
+   "description": "sbi = State Bank of India, axis, bob = Bank of Baroda, bom = Bank of Maharashtra, canara, iob = Indian Overseas Bank, union = Union Bank of India"
+  },
+  {
+   "fieldname": "other_bank_code",
+   "fieldtype": "Data",
+   "label": "Institution Code",
+   "depends_on": "eval:doc.source=='Other central bank code'",
+   "mandatory_depends_on": "eval:doc.source=='Other central bank code'",
+   "description": "Any code from https://allratestoday.com/central-bank-rates-api/institutions/ (e.g. snb, cbuae, boe)"
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key",
+   "mandatory_depends_on": "eval:doc.source=='Live market rates (API key)'",
+   "description": "Needed only for live market rates (free API key at https://allratestoday.com/register). A paid-plan key also lets the ERPNext provider preset use the official table of RBI, ECB or another bank on any date."
+  },
+  {
+   "fieldname": "live_sync_frequency",
+   "fieldtype": "Select",
+   "label": "Live Sync Frequency",
+   "options": "Daily\nHourly",
+   "default": "Daily",
+   "depends_on": "eval:doc.source=='Live market rates (API key)'",
+   "description": "Each sync is one API call. Hourly suits paid plans."
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "base_currency",
+   "fieldtype": "Link",
+   "label": "Base Currency",
+   "options": "Currency",
+   "description": "Usually your company currency. Blank = currency of the default company."
+  },
+  {
+   "fieldname": "currencies",
+   "fieldtype": "Table MultiSelect",
+   "label": "Currencies",
+   "options": "AllRatesToday Currency",
+   "description": "Foreign currencies to load. Blank = every currency the source publishes that is enabled in ERPNext."
+  },
+  {
+   "fieldname": "write_buying_selling",
+   "fieldtype": "Check",
+   "label": "Write separate Buying and Selling rates",
+   "default": "0",
+   "description": "For bank TT cards and CBIC (import/export)"
+  },
+  {
+   "fieldname": "write_inverse",
+   "fieldtype": "Check",
+   "label": "Also write the inverse pair",
+   "default": "0",
+   "description": "e.g. INR to USD as well as USD to INR"
+  },
+  {
+   "fieldname": "direction_section",
+   "fieldtype": "Section Break",
+   "label": "Rate Direction",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "rate_direction_note",
+   "fieldtype": "HTML",
+   "label": "Rate Direction Note",
+   "options": "<p><b>Direction.</b> ERPNext stores a rate as <i>1 From Currency = Exchange Rate To Currency</i>. RBI publishes 1 USD = 95.25 INR, so the app writes From = USD, To = INR (your base currency), Exchange Rate = 95.25. Per-100 quotes (JPY, IDR, KRW) arrive already normalised to 1 unit.</p><p><b>Buying / selling.</b> With the split option on, bank TT cards write the bank's TT selling rate as the Buying record (purchases) and the TT buying rate as the Selling record (sales); CBIC writes the import rate as Buying and the export rate as Selling. With it off, one record is written for both: the TT buying rate (Income-tax Rule 115) for bank cards, the import rate for CBIC.</p>"
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "last_sync",
+   "fieldtype": "Datetime",
+   "label": "Last Sync",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_rate_date",
+   "fieldtype": "Date",
+   "label": "Last Rate Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error / Notes",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-11-01 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "AllRatesToday",
+ "name": "AllRatesToday Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

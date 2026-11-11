@@ -1,6 +1,6 @@
 # AllRatesToday Exchange Rates for ERPNext
 
-Load official exchange rates into ERPNext automatically: the RBI/FBIL reference rate, CBIC customs notification rates, Indian bank TT card rates, ECB reference rates, the table of any of 120+ central banks and tax authorities, or live market rates. Rates are written to ERPNext's own **Currency Exchange** records, so invoices, payments and journal entries pick them up with no customisation.
+Load official exchange rates into ERPNext automatically: the RBI/FBIL reference rate, CBIC customs notification rates, Indian bank TT card rates, ECB reference rates, the table of any of 130+ central banks and tax authorities, or live market rates. Rates are written to ERPNext's own **Currency Exchange** records, so invoices, payments and journal entries pick them up with no customisation.
 
 The official and bank-card sources are keyless: no account, no sign-up.
 
